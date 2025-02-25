@@ -1,15 +1,29 @@
 import streamlit as st
+import os
 import firebase_admin
 from firebase_admin import credentials, db
-import time
+from dotenv import load_dotenv
 
-# โหลด Firebase Credentials
-if not firebase_admin._apps:
-    cred = credentials.Certificate("computer-science-34b7a-firebase-adminsdk-az6ze-5f80d21397.json")
-    firebase_admin.initialize_app(cred, {
-        "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
-    })
+# โหลดข้อมูลจาก .env ที่จัดเก็บใน GitHub Secrets
+load_dotenv()
 
+# เอาคีย์ Firebase จาก GitHub Secrets
+firebase_key_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+
+# เปลี่ยนไฟล์ JSON จาก string เป็นไฟล์ชั่วคราว
+import json
+from tempfile import NamedTemporaryFile
+
+# สร้างไฟล์ชั่วคราวเพื่อใช้เชื่อมต่อ Firebase
+with NamedTemporaryFile(delete=False) as temp_file:
+    temp_file.write(json.loads(firebase_key_json))
+    temp_file_name = temp_file.name
+
+# เชื่อมต่อ Firebase
+cred = credentials.Certificate(temp_file_name)
+firebase_admin.initialize_app(cred, {
+    "databaseURL": "https://your-project-id.firebaseio.com/"
+})
 # อ้างอิงไปยัง Firebase Database
 chat_ref = db.reference("/chat_messages")
 
