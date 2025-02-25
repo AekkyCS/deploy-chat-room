@@ -3,6 +3,7 @@ import os
 import firebase_admin
 from firebase_admin import credentials, db
 from dotenv import load_dotenv
+import time  # เพิ่มการนำเข้า time
 
 # โหลดข้อมูลจาก .env ที่จัดเก็บใน GitHub Secrets
 load_dotenv()
@@ -33,11 +34,15 @@ username = st.text_input("👤 Your name", key="username")
 
 # แสดงข้อความแชทแบบ Real-time
 st.subheader("📢 Chat room")
-messages = chat_ref.get()
 
-if messages:
-    for key, msg in messages.items():
-        st.write(f"**{msg['username']}**: {msg['message']}")
+# ฟังก์ชันในการดึงข้อความจาก Firebase และแสดงบน UI
+def show_messages():
+    messages = chat_ref.get()
+    if messages:
+        for key, msg in messages.items():
+            st.write(f"**{msg['username']}**: {msg['message']}")
+
+show_messages()  # เรียกฟังก์ชันแสดงข้อความ
 
 # ส่งข้อความ
 message = st.text_input("💬 message...", key="message")
@@ -49,11 +54,12 @@ if st.button("🚀 send"):
             "message": message,
             "timestamp": time.time()
         })
-        st.rerun()  # รีเฟรชหน้าจออัตโนมัติ
+        st.experimental_rerun()  # รีเฟรชหน้าจออัตโนมัติ
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
+# ล้างแชท (หาก username เป็น "aekky")
 if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
         chat_ref.set({})
-        st.rerun()
+        st.experimental_rerun()
