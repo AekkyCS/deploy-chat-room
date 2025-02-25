@@ -5,7 +5,7 @@ import time
 
 # โหลด Firebase Credentials
 if not firebase_admin._apps:
-    cred = credentials.Certificate("computer-science-34b7a-firebase-adminsdk-az6ze-94b8c07f11.json")
+    cred = credentials.Certificate("computer-science-34b7a-firebase-adminsdk-az6ze-5f80d21397.json")
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
