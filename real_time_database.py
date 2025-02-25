@@ -22,7 +22,7 @@ with NamedTemporaryFile(delete=False) as temp_file:
 # เชื่อมต่อ Firebase
 cred = credentials.Certificate(temp_file_name)
 firebase_admin.initialize_app(cred, {
-    "databaseURL": "https://your-project-id.firebaseio.com/"
+    "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
 })
 # อ้างอิงไปยัง Firebase Database
 chat_ref = db.reference("/chat_messages")
